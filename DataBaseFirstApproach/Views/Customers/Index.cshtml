@@ -1,0 +1,108 @@
+﻿@model IEnumerable<DataBaseFirstApproach.Models.Customer>
+
+@{
+    ViewData["Title"] = "EF CRUD";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body{
+        background-color: aliceblue;
+    }
+</style>
+<h3 style="margin-top:50px">
+    <a style="text-decoration:none" asp-action="Create">Create New</a>
+</h3>
+<div class="form-check-inline">
+
+    <input type="text" id="lastName" class="form-control" placeholder="Filter Text" />
+    <select name="filter type" id="filter">
+        <option value="last">Last Name</option>
+        <option value="city">City</option>
+    </select>
+    <button type="button" class="btn btn-primary" onclick="
+        let col;
+        col = document.getElementById('filter').value === 'last' ? 1 : 2;
+        let lastName = document.getElementById('lastName').value.trim();
+        if(lastName.length === 0){
+        alert('empty field');
+        }
+else if(lastName.length === 1 && col === 1){
+
+        let rows = document.getElementById('target').children[1].rows;
+        for(let row of rows) {
+            let rowArray = row.getElementsByTagName('td');
+            if(rowArray[col].innerText.trim().toLowerCase()[0] != lastName.toLowerCase()[0]){
+                row.style.display = 'none';
+}
+}
+}
+else{
+        let rows = document.getElementById('target').children[1].rows;
+        for(let row of rows) {
+            let rowArray = row.getElementsByTagName('td');
+            if(rowArray[col].innerText.trim().toLowerCase() != lastName.toLowerCase()){
+                row.style.display = 'none';
+}
+}
+}
+
+        
+    
+">Filter</button>
+    <button type="button" class="btn btn-danger" onclick="
+
+            let rows = document.getElementById('target').children[1].rows;
+        for(let row of rows) { row.style.display = 'table-row'; }
+
+">Clear</button>
+</div>
+<table class="table table-striped" id="target">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
