@@ -56,10 +56,21 @@ namespace DataBaseFirstApproach.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,City,Country,Phone")] Customer customer)
         {
-            if (ModelState.IsValid)
+            int id = 0;
+
+            foreach(Customer curr in _context.Customers)
             {
+                id++;
+            }
+            
+            if (ModelState.IsValid && id < 100)
+            {
+                customer.Id = id;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else if (id >= 100) {
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
